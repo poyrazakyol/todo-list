@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/home.dart';
 
 class LoginScreen extends StatelessWidget {
-  final String validEmail = 'poyrazakyol@gmail.com';
+  final String validEmail = 'poyrazakyol';
   final String validPassword = '123456';
 
   final TextEditingController emailController = TextEditingController();

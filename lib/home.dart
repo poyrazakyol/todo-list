@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/model/dao.dart';
+import 'package:todo_list/note_view.dart';
 
-import '../items.dart';
-import '../todo.dart';
+import 'model/todo.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -43,9 +44,9 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
-                  //searchBox(),
                   Expanded(
-                    child: ListView(
+                    child:
+                        NotesView(), /*ListView(
                       children: [
                         Container(
                           padding: EdgeInsets.only(
@@ -67,7 +68,7 @@ class _HomeState extends State<Home> {
                             deleteItem: deleteItem,
                           ),
                       ],
-                    ),
+                    ),*/
                   ),
                 ],
               ),
@@ -139,7 +140,7 @@ class _HomeState extends State<Home> {
 
   void toDoChange(ToDo todo) {
     setState(() {
-      todo.isDone = !todo.isDone;
+      todo.isDone = (todo.isDone != null) ? !(todo.isDone!) : true;
     });
   }
 
@@ -149,7 +150,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void addItem(String toDo) {
+  /*void addItem(String toDo) {
     setState(() {
       todosList.add(ToDo(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -157,34 +158,10 @@ class _HomeState extends State<Home> {
       ));
     });
     todoController.clear();
-  }
-
-  /*Widget searchBox() {
-    return Padding(
-      padding: EdgeInsets.all(15.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: TextField(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(0),
-            prefixIcon: Icon(
-              Icons.search,
-              color: Colors.black,
-              size: 20,
-            ),
-            prefixIconConstraints: BoxConstraints(
-              maxHeight: 30,
-              minWidth: 30,
-            ),
-            border: InputBorder.none,
-            hintText: 'Ara',
-            hintStyle: TextStyle(color: Colors.grey),
-          ),
-        ),
-      ),
-    );
   }*/
+
+  Future<void> addItem(String toDo) async {
+    await ToDoDao().addNote("1", toDo, 0);
+    setState(() {});
+  }
 }

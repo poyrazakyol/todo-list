@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../todo.dart';
+import 'model/todo.dart';
 
 class todoItem extends StatelessWidget {
   final ToDo todo;
@@ -28,7 +28,7 @@ class todoItem extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         tileColor: Colors.white,
         leading: Icon(
-          todo.isDone ? Icons.check_box : Icons.check_box_outline_blank,
+          todo.isDone! ? Icons.check_box : Icons.check_box_outline_blank,
           color: Colors.blue,
         ),
         title: Text(
@@ -36,7 +36,7 @@ class todoItem extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             color: Colors.black,
-            decoration: todo.isDone ? TextDecoration.lineThrough : null,
+            decoration: todo.isDone! ? TextDecoration.lineThrough : null,
           ),
         ),
         trailing: Container(
