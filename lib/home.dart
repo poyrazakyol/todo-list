@@ -42,11 +42,12 @@ class _HomeState extends State<Home> {
           Container(
             child: Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Column(
+              child:
+                  NotesView(), /*Column(
                 children: [
                   Expanded(
                     child:
-                        NotesView(), /*ListView(
+                         ListView(
                       children: [
                         Container(
                           padding: EdgeInsets.only(
@@ -68,10 +69,10 @@ class _HomeState extends State<Home> {
                             deleteItem: deleteItem,
                           ),
                       ],
-                    ),*/
+                    ),
                   ),
                 ],
-              ),
+              ),*/
             ),
           ),
           Align(

@@ -22,20 +22,16 @@ class _NotesViewState extends State<NotesView> {
     return FutureBuilder<List<ToDo>>(
       future: getNotes(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<ToDo> notes = snapshot.data!;
-          return SliverList(
-            delegate: SliverChildBuilderDelegate(childCount: notes.length,
-                (context, index) {
-              ToDo note = notes[index];
-              return Text(note.todoText!);
-            }),
-          );
-        } else {
+        if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
+        List<ToDo> notes = snapshot.data!;
+        return ListView.builder(
+          itemCount: notes.length,
+          itemBuilder: (context, index) => Text(notes[index].todoText!),
+        );
       },
     );
   }
