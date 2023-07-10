@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/model/dao.dart';
 import 'package:todo_list/note_view.dart';
 
-import 'model/todo.dart';
-
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
 
@@ -12,7 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final todosList = ToDo.todoList();
+  //final todosList = ToDo.todoList();
   final todoController = TextEditingController();
 
   @override
@@ -29,10 +27,14 @@ class _HomeState extends State<Home> {
               color: Colors.black,
               size: 30,
             ),
-            Container(
-              height: 40,
-              width: 40,
-              child: Image.asset('images/bne.png'),
+            Center(child: Text("poyrazakyol")),
+            GestureDetector(
+              onTap: _showPhoto,
+              child: Container(
+                height: 40,
+                width: 40,
+                child: Image.asset('images/bne.png'),
+              ),
             ),
           ],
         ),
@@ -41,7 +43,7 @@ class _HomeState extends State<Home> {
         children: [
           Container(
             child: Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 45),
               child:
                   NotesView(), /*Column(
                 children: [
@@ -124,6 +126,7 @@ class _HomeState extends State<Home> {
                   ),
                   onPressed: () {
                     addItem(todoController.text);
+                    todoController.clear();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
@@ -139,30 +142,20 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void toDoChange(ToDo todo) {
-    setState(() {
-      todo.isDone = (todo.isDone != null) ? !(todo.isDone!) : true;
-    });
-  }
-
-  void deleteItem(String id) {
-    setState(() {
-      todosList.removeWhere((item) => item.id == id);
-    });
-  }
-
-  /*void addItem(String toDo) {
-    setState(() {
-      todosList.add(ToDo(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        todoText: toDo,
-      ));
-    });
-    todoController.clear();
-  }*/
-
   Future<void> addItem(String toDo) async {
     await ToDoDao().addNote("1", toDo, 0);
     setState(() {});
+  }
+
+  Future<void> _showPhoto() async {
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: OvalBorder(),
+            backgroundColor: Colors.orange[300],
+            content: Image.asset("images/bne.png"),
+          );
+        });
   }
 }

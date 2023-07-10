@@ -1,20 +1,20 @@
 class ToDo {
-  String? id;
+  int? id;
   String? todoText;
-  bool? isDone;
+  int? isDone;
   String? accountid;
 
   ToDo({
     this.id,
     this.todoText,
     this.accountid,
-    this.isDone = false,
+    this.isDone = 1,
   });
 
-  static List<ToDo> todoList() {
+  /*static List<ToDo> todoList() {
     return [
-      ToDo(id: '01', todoText: 'Kahvaltı', isDone: true),
-      ToDo(id: '02', todoText: 'Alışveriş', isDone: true),
+      ToDo(id: 1, todoText: 'Kahvaltı', isDone: true),
+      ToDo(id: 1, todoText: 'Alışveriş', isDone: true),
       ToDo(
         id: '03',
         todoText: 'Mail Kontrolü',
@@ -28,5 +28,5 @@ class ToDo {
         todoText: 'Flutter Çalışması',
       ),
     ];
-  }
+  }*/
 }

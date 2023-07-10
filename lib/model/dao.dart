@@ -44,16 +44,21 @@ class ToDoDao {
     });
   }*/
 
-  Future<void> noteUpdate(
-      int id, String account, String text, int isDone) async {
+  Future<void> noteUpdate(ToDo todo) async {
     var db = await DatabaseHelper.databaseAccess();
 
     Map<String, dynamic> info = {};
-    info["account"] = account;
-    info["text"] = text;
-    info["isDone"] = isDone;
+    info["account"] = todo.accountid!;
+    info["task"] = todo.todoText!;
+    info["isDone"] = todo.isDone!;
+    //info["id"] = todo.id!;
 
-    await db.update("ToDo", info, where: "id = ?", whereArgs: [id]);
+
+    try {
+      await db.update("ToDo", info, where: "id = ?", whereArgs: [todo.id]);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> noteDelete(int id) async {

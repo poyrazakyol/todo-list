@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/home.dart';
 
 class LoginScreen extends StatelessWidget {
-  final String validEmail = 'poyrazakyol';
+  final List<String> loginInfo = ["poyrazakyol@gmail.com", "poyrazakyol"];
   final String validPassword = '123456';
 
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController loginController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   void _login(BuildContext context) {
-    String enteredEmail = emailController.text;
+    String enteredInfo = loginController.text;
     String enteredPassword = passwordController.text;
 
-    if (enteredEmail == validEmail && enteredPassword == validPassword) {
+    if ((enteredInfo == loginInfo[0] && enteredPassword == validPassword) ||
+        (enteredInfo == loginInfo[1] && enteredPassword == validPassword)) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Home()),
@@ -65,9 +66,9 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(ekranYukseligi / 30),
                 child: TextField(
-                  controller: emailController,
+                  controller: loginController,
                   decoration: InputDecoration(
-                    hintText: 'E-Posta',
+                    hintText: 'Kullanıcı Adı veya E-Posta',
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
