@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'model/todo.dart';
+import 'model/Task.dart';
 
 class todoItem extends StatelessWidget {
-  final ToDo todo;
+  final Task todo;
   final toDoChanged;
   final deleteItem;
 
@@ -28,15 +28,18 @@ class todoItem extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         tileColor: Colors.white,
         leading: Icon(
-          (todo.isDone! == 1) ? Icons.check_box : Icons.check_box_outline_blank,
+          (todo.task_isdone! == 1)
+              ? Icons.check_box
+              : Icons.check_box_outline_blank,
           color: Colors.blue,
         ),
         title: Text(
-          todo.todoText!,
+          todo.task_name,
           style: TextStyle(
             fontSize: 16,
             color: Colors.black,
-            decoration: (todo.isDone! == 1) ? TextDecoration.lineThrough : null,
+            decoration:
+                (todo.task_isdone! == 1) ? TextDecoration.lineThrough : null,
           ),
         ),
         trailing: Container(
@@ -51,7 +54,7 @@ class todoItem extends StatelessWidget {
             iconSize: 18,
             icon: Icon(Icons.delete),
             onPressed: () {
-              deleteItem(todo.id);
+              deleteItem(todo.task_id);
             },
           ),
         ),

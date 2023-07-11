@@ -1,18 +1,25 @@
-import 'package:path/path.dart' as p;
+import 'dart:io';
+
+import 'package:flutter/services.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  static const String databaseName = "todo.sqlite";
+  static final String ToDo = "todo.sqlite";
 
   static Future<Database> databaseAccess() async {
-    String databasePath = p.join(await getDatabasesPath(), databaseName);
+    String databasePath = join(await getDatabasesPath(), ToDo);
 
-    Database database = await openDatabase(databasePath, version: 1,
-        onCreate: (Database db, int version) async {
-      await db.execute(
-          'CREATE TABLE Todo (id INTEGER PRIMARY KEY, account TEXT, task TEXT, isDone INTEGER)');
-    });
+    if (await databaseExists(databasePath)) {
+      print("Already have a database");
+    } else {
+      ByteData data = await rootBundle.load("database/$ToDo");
+      List<int> bytes =
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      await File(databasePath).writeAsBytes(bytes, flush: true);
+      print("Database Copied");
+    }
 
-    return database;
+    return openDatabase(databasePath);
   }
 }

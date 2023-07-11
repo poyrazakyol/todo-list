@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/model/dao.dart';
-import 'package:todo_list/note_view.dart';
+import 'package:todo_list/login_screen.dart';
+import 'package:todo_list/model/Taskdao.dart';
+import 'package:todo_list/task_view.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   //final todosList = ToDo.todoList();
   final todoController = TextEditingController();
+  LoginScreen ls = LoginScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +24,42 @@ class _HomeState extends State<Home> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(
-              Icons.menu,
+            IconButton(
+              icon: Icon(Icons.arrow_back_outlined, size: 30),
               color: Colors.black,
-              size: 30,
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text("Çıkış Yap"),
+                    content: Text("Çıkış Yapmak İstediğine Emin Misin?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Hayır"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
+                            (route) => false,
+                          );
+                        },
+                        child: Text("Evet"),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-            Center(child: Text("poyrazakyol")),
+            Center(
+                child: Text(
+              ls.loginInfo[1],
+            )),
             GestureDetector(
               onTap: _showPhoto,
               child: Container(
@@ -45,7 +77,7 @@ class _HomeState extends State<Home> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(15, 15, 15, 45),
               child:
-                  NotesView(), /*Column(
+                  TaskView(), /*Column(
                 children: [
                   Expanded(
                     child:
@@ -143,7 +175,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> addItem(String toDo) async {
-    await ToDoDao().addNote("1", toDo, 0);
+    await TaskDao().addTask(toDo, 0);
     setState(() {});
   }
 
@@ -153,7 +185,7 @@ class _HomeState extends State<Home> {
         builder: (BuildContext context) {
           return AlertDialog(
             shape: OvalBorder(),
-            backgroundColor: Colors.orange[300],
+            backgroundColor: Colors.transparent,
             content: Image.asset("images/bne.png"),
           );
         });

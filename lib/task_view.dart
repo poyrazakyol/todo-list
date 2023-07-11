@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/model/dao.dart';
-import 'package:todo_list/model/todo.dart';
+import 'package:todo_list/model/Task.dart';
+import 'package:todo_list/model/Taskdao.dart';
 
-class NotesView extends StatefulWidget {
-  const NotesView({super.key});
+class TaskView extends StatefulWidget {
+  const TaskView({super.key});
 
   @override
-  State<NotesView> createState() => _NotesViewState();
+  State<TaskView> createState() => _TaskViewState();
 }
 
-class _NotesViewState extends State<NotesView> {
-  Future<List<ToDo>> getNotes() async {
-    var notes = await ToDoDao().getAll();
+class _TaskViewState extends State<TaskView> {
+  Future<List<Task>> getNotes() async {
+    var tasks = await TaskDao().getAllTasks();
 
-    return notes;
+    return tasks;
   }
 
   void refreshOnDelete() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ToDo>>(
+    return FutureBuilder<List<Task>>(
       future: getNotes(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -28,42 +28,42 @@ class _NotesViewState extends State<NotesView> {
             child: CircularProgressIndicator(),
           );
         }
-        List<ToDo> notes = snapshot.data!;
+        List<Task> tasks = snapshot.data!;
         return ListView.builder(
-          itemCount: notes.length,
-          itemBuilder: (context, index) => TodoItem(todoItem: notes[index], refreshWidget: refreshOnDelete,),
+          itemCount: tasks.length,
+          itemBuilder: (context, index) => TaskItem(
+            taskItem: tasks[index],
+            refreshWidget: refreshOnDelete,
+          ),
         );
       },
     );
   }
 }
 
+class TaskItem extends StatefulWidget {
+  const TaskItem(
+      {super.key, required this.taskItem, required this.refreshWidget});
 
-class TodoItem extends StatefulWidget {
-  const TodoItem({super.key, required this.todoItem, required this.refreshWidget});
-
-  final ToDo todoItem;
+  final Task taskItem;
   final refreshWidget;
 
   @override
-  State<TodoItem> createState() => _TodoItemState();
+  State<TaskItem> createState() => _TaskItemState();
 }
 
-class _TodoItemState extends State<TodoItem> {
+class _TaskItemState extends State<TaskItem> {
+  Future<void> taskChanged() async {
+    widget.taskItem.task_isdone = 1 - widget.taskItem.task_isdone!;
 
-  Future<void> toDoChanged() async {
+    await TaskDao().taskUpdate(widget.taskItem);
 
-    widget.todoItem.isDone = 1 - widget.todoItem.isDone!;
-
-    await ToDoDao().noteUpdate(widget.todoItem);
-    
     setState(() {});
   }
 
   Future<void> deleteItem() async {
+    await TaskDao().taskDelete(widget.taskItem.task_id);
 
-    await ToDoDao().noteDelete(widget.todoItem.id!);
-    
     widget.refreshWidget();
   }
 
@@ -73,7 +73,7 @@ class _TodoItemState extends State<TodoItem> {
       margin: EdgeInsets.only(bottom: 20),
       child: ListTile(
         onTap: () {
-          toDoChanged();
+          taskChanged();
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
@@ -81,15 +81,19 @@ class _TodoItemState extends State<TodoItem> {
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         tileColor: Colors.white,
         leading: Icon(
-          (widget.todoItem.isDone! == 1) ? Icons.check_box : Icons.check_box_outline_blank,
+          (widget.taskItem.task_isdone! == 1)
+              ? Icons.check_box
+              : Icons.check_box_outline_blank,
           color: Colors.blue,
         ),
         title: Text(
-          widget.todoItem.todoText!,
+          widget.taskItem.task_name,
           style: TextStyle(
             fontSize: 16,
             color: Colors.black,
-            decoration: (widget.todoItem.isDone! == 1) ? TextDecoration.lineThrough : null,
+            decoration: (widget.taskItem.task_isdone! == 1)
+                ? TextDecoration.lineThrough
+                : null,
           ),
         ),
         trailing: Container(

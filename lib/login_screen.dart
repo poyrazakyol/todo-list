@@ -23,7 +23,7 @@ class LoginScreen extends StatelessWidget {
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Hata'),
-          content: Text('Geçersiz E-Posta veya Şifre'),
+          content: Text('Geçersiz Kullanıcı Adı veya Şifre'),
           actions: [
             TextButton(
               onPressed: () {
