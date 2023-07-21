@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/model/Task.dart';
 import 'package:todo_list/model/Taskdao.dart';
+import 'package:todo_list/model/Userdao.dart';
 
 class TaskView extends StatefulWidget {
-  const TaskView({super.key});
+  const TaskView({Key? key}) : super(key: key);
 
   @override
   State<TaskView> createState() => _TaskViewState();
@@ -11,9 +12,13 @@ class TaskView extends StatefulWidget {
 
 class _TaskViewState extends State<TaskView> {
   Future<List<Task>> getNotes() async {
-    var tasks = await TaskDao().getAllTasks();
-
-    return tasks;
+    int? userId = await UserDao().getUserId();
+    if (userId != null) {
+      var tasks = await TaskDao().getAllTasks(userId);
+      return tasks;
+    } else {
+      return [];
+    }
   }
 
   void refreshOnDelete() => setState(() {});

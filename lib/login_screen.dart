@@ -1,22 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/adminhome.dart';
 import 'package:todo_list/home.dart';
+import 'package:todo_list/model/Userdao.dart';
 
 class LoginScreen extends StatelessWidget {
-  final List<String> loginInfo = ["poyrazakyol@gmail.com", "poyrazakyol"];
-  final String validPassword = '123456';
+  final String adminInfo = "";
+  final String adminPassword = '';
 
   final TextEditingController loginController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  void _login(BuildContext context) {
+  void _login(BuildContext context) async {
     String enteredInfo = loginController.text;
     String enteredPassword = passwordController.text;
+    UserDao().addUser(adminInfo, adminPassword, 1);
+    bool isAdmin = await UserDao().checkAdmin(enteredInfo, enteredPassword);
 
-    if ((enteredInfo == loginInfo[0] && enteredPassword == validPassword) ||
-        (enteredInfo == loginInfo[1] && enteredPassword == validPassword)) {
+    if (enteredInfo == adminInfo && enteredPassword == adminPassword) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Home()),
+        MaterialPageRoute(
+          builder: (context) => Admin(),
+        ),
+      );
+    } else if (isAdmin) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Admin(),
+        ),
+      );
+    } else if (await UserDao().controlUser(enteredInfo, enteredPassword)) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Home(),
+        ),
       );
     } else {
       showDialog(
@@ -42,11 +61,11 @@ class LoginScreen extends StatelessWidget {
     var ekranBilgisi = MediaQuery.of(context);
     final double ekranYukseligi = ekranBilgisi.size.height;
     final double ekranGenisligi = ekranBilgisi.size.width;
-
+    int isAdmin = 0;
     return Scaffold(
       backgroundColor: Colors.orange[400],
       appBar: AppBar(
-        toolbarHeight: 30,
+        toolbarHeight: 60,
         backgroundColor: Colors.deepPurple,
         title: Center(child: Text('ToDo List')),
       ),
@@ -68,7 +87,7 @@ class LoginScreen extends StatelessWidget {
                 child: TextField(
                   controller: loginController,
                   decoration: InputDecoration(
-                    hintText: 'Kullanıcı Adı veya E-Posta',
+                    hintText: 'Kullanıcı Adı',
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(

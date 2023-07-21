@@ -5,13 +5,11 @@ import 'package:todo_list/task_view.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
-
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  //final todosList = ToDo.todoList();
   final todoController = TextEditingController();
   LoginScreen ls = LoginScreen();
 
@@ -25,7 +23,12 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              icon: Icon(Icons.arrow_back_outlined, size: 30),
+              icon: Icon(Icons.person_2_outlined, size: 30),
+              color: Colors.black,
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.exit_to_app_outlined, size: 30),
               color: Colors.black,
               onPressed: () {
                 showDialog(
@@ -38,7 +41,7 @@ class _HomeState extends State<Home> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text("Hayır"),
+                        child: const Text("Hayır"),
                       ),
                       TextButton(
                         onPressed: () {
@@ -56,18 +59,6 @@ class _HomeState extends State<Home> {
                 );
               },
             ),
-            Center(
-                child: Text(
-              ls.loginInfo[1],
-            )),
-            GestureDetector(
-              onTap: _showPhoto,
-              child: Container(
-                height: 40,
-                width: 40,
-                child: Image.asset('images/bne.png'),
-              ),
-            ),
           ],
         ),
       ),
@@ -76,37 +67,7 @@ class _HomeState extends State<Home> {
           Container(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(15, 15, 15, 45),
-              child:
-                  TaskView(), /*Column(
-                children: [
-                  Expanded(
-                    child:
-                         ListView(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(
-                            top: 50,
-                            bottom: 20,
-                          ),
-                          child: Text(
-                            'Yapılacaklar',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        for (ToDo todoo in todosList)
-                          todoItem(
-                            todo: todoo,
-                            toDoChanged: toDoChange,
-                            deleteItem: deleteItem,
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),*/
+              child: TaskView(),
             ),
           ),
           Align(
@@ -175,19 +136,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> addItem(String toDo) async {
-    await TaskDao().addTask(toDo, 0);
+    await TaskDao().addTask(toDo);
     setState(() {});
-  }
-
-  Future<void> _showPhoto() async {
-    return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: OvalBorder(),
-            backgroundColor: Colors.transparent,
-            content: Image.asset("images/bne.png"),
-          );
-        });
   }
 }

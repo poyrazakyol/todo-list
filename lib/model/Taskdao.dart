@@ -1,11 +1,13 @@
 import 'package:todo_list/model/Task.dart';
+import 'package:todo_list/model/Userdao.dart';
 import 'package:todo_list/model/database_helper.dart';
 
 class TaskDao {
-  Future<List<Task>> getAllTasks() async {
+  Future<List<Task>> getAllTasks(int userId) async {
     var db = await DatabaseHelper.databaseAccess();
 
-    List<Map<String, dynamic>> maps = await db.rawQuery("SELECT *  FROM task");
+    List<Map<String, dynamic>> maps =
+        await db.rawQuery("SELECT *  FROM task WHERE user_id = ?", [userId]);
 
     return List.generate(maps.length, (i) {
       var row = maps[i];
@@ -15,15 +17,22 @@ class TaskDao {
     });
   }
 
-  Future<void> addTask(String task_name, int user_id) async {
-    var db = await DatabaseHelper.databaseAccess();
+  Future<Task> addTask(String task_name) async {
+    int? userId = await UserDao().getUserId();
 
-    var info = Map<String, dynamic>();
-    info["task_name"] = task_name;
-    info["task_isdone"] = false;
-    info["user_id"] = user_id;
+    if (userId != null) {
+      var db = await DatabaseHelper.databaseAccess();
 
-    await db.insert("task", info);
+      var info = Map<String, dynamic>();
+      info["task_name"] = task_name;
+      info["task_isdone"] = 0;
+      info["user_id"] = userId;
+
+      int id = await db.insert("task", info);
+      return Task(id, task_name, 0, userId);
+    } else {
+      throw Exception("User didn't found!");
+    }
   }
 
   Future<void> taskUpdate(Task task) async {

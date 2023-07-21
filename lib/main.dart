@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_list/adminhome.dart';
 import 'package:todo_list/home.dart';
 import 'package:todo_list/login_screen.dart';
 
@@ -12,15 +14,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'ToDo App',
-      initialRoute: '/login',
-      routes: {
-        '/login': (context) => LoginScreen(),
-        '/todo': (context) => Home(),
-      },
+    return ChangeNotifierProvider(
+      create: (_) => UserIdProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'ToDo App',
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => LoginScreen(),
+          '/todo': (context) => Home(),
+          '/admin': (context) => Admin(),
+        },
+      ),
     );
+  }
+}
+
+class UserIdProvider with ChangeNotifier {
+  int? user_id;
+
+  void setUserId(int? id) {
+    user_id = id;
+    notifyListeners();
   }
 }
 
